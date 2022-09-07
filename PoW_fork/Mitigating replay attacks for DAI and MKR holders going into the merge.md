@@ -1,6 +1,6 @@
 # *Brace for impact!* Mitigating replay attacks for DAI and MKR holders going into the merge.
 
-*The following guide provides context and information about replay attacks, a potential Ethereum hard fork with a chainId of 1 and potential effects on MakerDAO contracts, as well as risks of using DAI's permit function on all Ethereum mainnet forks. None of the following information constitutes advice of any form.*
+*The following guide provides context and information about replay attacks, a potential Ethereum hard fork and potential effects on MakerDAO contracts, as well as risks of using DAI's permit function on all Ethereum mainnet forks. None of the following information constitutes advice of any form.*
 
 The merge is upon us! Finally, after years of extensive testing and work, the transition proof of stake Ethereum is ready. However, in the last few months, miners along with other parties have raised the possibility of a hard fork of Ethereum, creating a proof of work chain (PoW) as well as a proof of stake chain (PoS).
 
@@ -18,15 +18,15 @@ Replay attacks? Those sound scary! However, we can be certain that the PoW ETH w
 ![[PoW_PRs.png]]
 [*Open pull requests changing the chain ID remain unmerged.*](https://github.com/ethereumpow/go-ethereum/pulls)
 
-Based on this, it appears that there's a non-zero chance that PoW ETH *will use the same chainId* as PoS ETH. This is **really not good** if you don't know what you're doing. The following discussion assumes that the `chainId` of the PoW fork will be `1`. Let's discuss why this is *really* bad and how you can avoid being impacted.
+Based on this, it appears that there's a non-zero chance that PoW ETH *will use the same chainId* as PoS ETH. The following discussion assumes that the `chainId` of the PoW fork will be `1`. Let's discuss why this is *really* bad and how you can minimise the risk that you are affected by this.
 
 ## What is a replay attack?
 
-A replay attack is taking a transaction from one network and using it on another network. Let's say you sent someone 100 wETH on the PoW fork; you wouldn't want this action to be repeatable on the Ethereum mainnet without your permission, right?
+A replay attack is taking a transaction from one network and using it on another network. If you sent someone 100 wETH on the PoW fork; you wouldn't want this action to be repeatable on the Ethereum mainnet without your permission, however replay attacks make this possible.
 
 > *A replay attack is the broadcasting of a transaction from one blockchain/network on another blockchain/network.*
 
-A replay attack involves taking your transaction on PoW ETH and **replaying** it on PoS ETH. [EIP-155](https://github.com/ethereum/EIPs/issues/155) was implemented to prevent replay attacks by using a unique `chainId` value for different networks (such as Binance Smart Chain, Polygon and testnets like Rinkeby and Goerli) **however if the same `chainId` is used on two networks, replay attacks become possible again.**
+A replay attack involves taking a transaction on PoW ETH and **replaying** it on PoS ETH. [EIP-155](https://github.com/ethereum/EIPs/issues/155) was implemented to prevent replay attacks by using a unique `chainId` value for different networks (such as Binance Smart Chain and Polygon as well as testnets like Rinkeby and Goerli) **however if the same `chainId` is used on two networks, replay attacks become possible again.**
 
 ## How do replay attacks affect DAI and MKR owners?
 
@@ -51,20 +51,20 @@ Clearly this is a pretty big issue to address, from a technical standpoint. Here
 
 ##### DAI token
 
-The [DAI token contract](https://github.com/makerdao/dss/blob/master/src/dai.sol) is immutable and was provided a `chainId` in it's constructor. The DAI  `permit` derives the digest from the `DOMAIN_SEPARATOR` which is based on the  `chainId` provided in the constructor (1) rather than the current `chainId`. This makes interactions with DAI unsafe on any 'proper' fork (one which changes the `chainId`) of Ethereum `mainnet`.  Again, regardless of whether the `chainId` is updated on the fork, usage of DAI on any fork of mainnet could result in loss of DAI on mainnet via replay attack.  
+The [DAI token contract](https://github.com/makerdao/dss/blob/master/src/dai.sol) is immutable and was provided a `chainId` in it's constructor. The DAI  `permit` derives the digest from the `DOMAIN_SEPARATOR` which is based on the  `chainId` provided in the constructor rather than the current `chainId`. This makes interactions with DAI unsafe on any 'proper' fork (one which changes the `chainId`) of Ethereum `mainnet`.  Again, regardless of whether the `chainId` is updated on the fork, usage of DAI on any fork of mainnet could result in loss of DAI on mainnet via replay attack.  
 
 *The use of `permit` on any hard fork of Ethereum's current state could be used to transfer users' funds via a replay attack on other forks, including `mainnet`.*
 
 ##### What does this mean for DAI and MKR holders?
 
-Here are your options for PoW chain interaction, from safest to riskiest:
-
+Here are some options for PoW chain interaction, from safest to riskiest:
 1) Do not interact with the PoW fork at all (no interactions at all).
 2) Do not interact MKR, DAI or any MakerDAO associated contracts on the PoW fork.
 3) Interact with the fork, taking extreme precautionary measures and **assume that all of your transactions will be replayed on mainnet.** Avoid the use of `permit` and do not assume that DAI will be using the correct price feeds or that it is sufficiently collateralised.
+
 
 ## Wrapping up
 
 If the PoW fork backers decide to use a `chainId` of 1, the PoW fork will be incredibly dangerous for all users, including technical and experienced ones. [Bitcoin Cash](https://www.circle.com/blog/preventing-replay-attacks-after-the-bch-hard-fork) and [Ethereum Classic](https://www.coindesk.com/markets/2016/07/29/rise-of-replay-attacks-intensifies-ethereum-divide/) experienced replay attacks (even with ETC using a `chainId` of 61) which claimed the funds of new and old investors alike. 
 
-The decision to interact with the PoW fork is yours to make - hopefully you are more educated on some of the risks present if you do so.
+Interactions with a PoW ETH fork are risky and the use of DAI's `permit` function should be avoided on all forks of Ethereum's current state.
