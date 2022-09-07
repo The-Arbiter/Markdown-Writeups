@@ -67,4 +67,4 @@ Here are some options for PoW chain interaction, from safest to riskiest:
 
 If the PoW fork backers decide to use a `chainId` of 1, the PoW fork will be incredibly dangerous for all users, including technical and experienced ones. [Bitcoin Cash](https://www.circle.com/blog/preventing-replay-attacks-after-the-bch-hard-fork) and [Ethereum Classic](https://www.coindesk.com/markets/2016/07/29/rise-of-replay-attacks-intensifies-ethereum-divide/) experienced replay attacks (even with ETC using a `chainId` of 61) which claimed the funds of new and old investors alike. 
 
-Interactions with a PoW ETH fork are risky and the use of DAI's `permit` function should be avoided on all forks of Ethereum's current state.
+ It is worth nothing that interacting with the Maker Protocol on **any future fork of Ethereum mainnet's current state** is dangerous - **even if the fork uses a different `chainId` value** - due to the aforementioned issues.
