@@ -1,4 +1,4 @@
-# *Brace for impact!* Mitigating replay attacks for DAI and MKR holders going into the merge.
+# PECU Announcement: Maker Protocol and future forks of Ethereum mainnet
 
 *The following guide provides context and information about replay attacks, a potential Ethereum hard fork and potential effects on MakerDAO contracts, as well as risks of using DAI's permit function on all Ethereum mainnet forks. None of the following information constitutes advice of any form.*
 
